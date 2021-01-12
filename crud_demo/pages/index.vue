@@ -199,7 +199,7 @@ export default {
     }
   },
   computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
+    // ? 查询功能
     list() {
       if (this.name) {
         return this.data.filter((x) => {
@@ -219,12 +219,14 @@ export default {
     },
   },
   methods: {
+    // ? 保存按钮
     handleSave(index) {
       this.data[index].name = this.editName
       this.data[index].age = this.editAge
       this.data[index].address = this.editAddress
       this.editIndex = -1
     },
+    // ? 添加弹窗中的添加按钮
     addModal() {
       if ((this.addName, this.addAge, this.addAddress)) {
         this.data.push({
@@ -239,6 +241,7 @@ export default {
       this.addName = ''
       this.addAddress = ''
     },
+    // ?修改按钮
     modifyBtn(row, index) {
       console.log(row.age)
       this.editIndex = index
@@ -246,6 +249,7 @@ export default {
       this.editAge = row.age
       this.editAddress = row.address
     },
+    // ?删除按钮
     remove(index) {
       this.data.splice(index, 1)
     },
