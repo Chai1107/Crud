@@ -169,49 +169,12 @@ export default {
   computed: {
     // ? 查询功能
     list() {
-      if (this.userv.name && !this.userv.age && !this.userv.address) {
-        return this.data.filter((x) => {
-          return x.name.match(this.userv.name)
-        })
-      } else if (this.userv.age && !this.userv.name && !this.userv.address) {
-        return this.data.filter((x) => {
-          return x.age.toString().match(this.userv.age)
-        })
-      } else if (this.userv.address && !this.userv.age && !this.userv.name) {
-        return this.data.filter((x) => {
-          return x.address.match(this.userv.address)
-        })
-      } else if (this.userv.name && this.userv.age && !this.userv.address) {
-        return this.data.filter((x) => {
-          return (
-            x.name.match(this.userv.name) &&
-            x.age.toString().match(this.userv.age)
-          )
-        })
-      } else if (this.userv.name && this.userv.address && !this.userv.age) {
-        return this.data.filter((x) => {
-          return (
-            x.name.match(this.userv.name) && x.address.match(this.userv.address)
-          )
-        })
-      } else if (this.userv.age && this.userv.address && !this.userv.name) {
-        return this.data.filter((x) => {
-          return (
-            x.age.toString().match(this.userv.age) &&
-            x.address.match(this.userv.address)
-          )
-        })
-      } else if (this.userv.name && this.userv.age && this.userv.address) {
-        return this.data.filter((x) => {
-          return (
-            x.name.match(this.userv.name) &&
-            x.age.toString().match(this.userv.age) &&
-            x.address.match(this.userv.address)
-          )
-        })
-      } else {
-        return this.data
-      }
+      return this.data.filter(
+        (x) =>
+          x.name.includes(this.userv.name) &&
+          x.age.toString().includes(this.userv.age) &&
+          x.address.includes(this.userv.address)
+      )
     },
   },
   methods: {
