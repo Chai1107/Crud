@@ -5,48 +5,21 @@
     <div class="search-card">
       <p class="input-title">姓名</p>
       <Input
-        v-if="age || address"
-        v-model="name"
-        class="search-input"
-        placeholder="根据姓名查询"
-        clearable
-        disabled
-      />
-      <Input
-        v-else
-        v-model="name"
+        v-model="userv.name"
         class="search-input"
         placeholder="根据姓名查询"
         clearable
       />
       <p class="input-title">年龄</p>
       <Input
-        v-if="name || address"
-        v-model="age"
-        class="search-input"
-        type="number"
-        placeholder="根据年龄查询"
-        disabled
-      />
-      <Input
-        v-else
-        v-model="age"
+        v-model="userv.age"
         class="search-input"
         type="number"
         placeholder="根据年龄查询"
       />
       <p class="input-title">地址</p>
       <Input
-        v-if="age || name"
-        v-model="address"
-        class="search-input"
-        placeholder="根据地址查询"
-        clearable
-        disabled
-      />
-      <Input
-        v-else
-        v-model="address"
+        v-model="userv.address"
         class="search-input"
         placeholder="根据地址查询"
         clearable
@@ -54,8 +27,8 @@
     </div>
     <!-- 主要内容 -->
     <div class="main-card">
-      <Button class="addBtn" @click="modalAdd = true">
-        <Icon class="addIcon" type="md-add" />
+      <Button class="add-btn" @click="addBtn()">
+        <Icon class="add-icon" type="md-add" />
       </Button>
       <!-- 新增弹窗 -->
       <Modal
@@ -65,64 +38,66 @@
         @on-ok="addModal"
       >
         <p class="input-title">姓名</p>
-        <Input v-model="addName" placeholder="请输入姓名" clearable />
+        <Input v-model="userAdd.name" placeholder="请输入姓名" clearable />
         <p class="input-title">年龄</p>
         <Input
-          v-model="addAge"
+          v-model="userAdd.age"
           type="number"
           placeholder="请输入年龄"
           clearable
         />
         <p class="input-title">地址</p>
-        <Input v-model="addAddress" placeholder="请输入地址" clearable />
+        <Input v-model="userAdd.address" placeholder="请输入地址" clearable />
       </Modal>
       <!-- 表格 -->
       <Table height="450" :columns="columns" :data="list">
-        <template slot="name" slot-scope="{ row, index }">
-          <Input
-            v-if="editIndex === index"
-            v-model="editName"
-            class="nameInput"
-            clearable
-            type="text"
-          />
-          <span v-else>{{ row.name }}</span>
+        <template slot="name" slot-scope="{ row }">
+          <span>{{ row.name }}</span>
         </template>
-        <template slot="age" slot-scope="{ row, index }">
-          <Input
-            v-if="editIndex === index"
-            v-model="editAge"
-            class="ageInput"
-            type="number"
-          />
-          <span v-else>{{ row.age }}</span>
+        <template slot="age" slot-scope="{ row }">
+          <span>{{ row.age }}</span>
         </template>
-        <template slot="address" slot-scope="{ row, index }">
-          <Input
-            v-if="editIndex === index"
-            v-model="editAddress"
-            class="addressInput"
-            clearable
-            type="text"
-          />
-          <span v-else>{{ row.address }}</span>
+        <template slot="address" slot-scope="{ row }">
+          <span>{{ row.address }}</span>
         </template>
         <template slot="action" slot-scope="{ row, index }">
-          <div v-if="editIndex === index" class="operation">
-            <Button class="saveBtn" @click="handleSave(index)">保存</Button>
-            <Button class="cancelBtn" @click="editIndex = -1">取消</Button>
-          </div>
-          <div v-else>
+          <div>
             <Button
               type="primary"
               size="small"
-              class="modifyBtn"
+              class="modify-btn"
               @click="modifyBtn(row, index)"
             >
               修改
             </Button>
+            <Modal
+              v-model="editModal"
+              title="修改"
+              ok-text="保存"
+              cancel-text="取消"
+              @on-ok="saveBtn(indexx)"
+            >
+              <p class="input-title">姓名</p>
+              <Input
+                v-model="userEdit.name"
+                placeholder="请输入姓名"
+                clearable
+              />
+              <p class="input-title">年龄</p>
+              <Input
+                v-model="userEdit.age"
+                type="number"
+                placeholder="请输入年龄"
+              />
+              <p class="input-title">地址</p>
+              <Input
+                v-model="userEdit.address"
+                placeholder="请输入地址"
+                clearable
+              />
+            </Modal>
             <Button
-              class="deleteBtn"
+              class="delete-btn"
               type="error"
               size="small"
               @click="remove(index)"
@@ -140,19 +115,12 @@
 export default {
   data() {
     return {
-      name: '',
-      age: '',
-      address: '',
-      addName: '', // ? 添加弹窗中绑定的姓名
-      addAge: '', // ? 添加弹窗中绑定的年龄
-      addAddress: '', // ? 添加弹窗中绑定的地址
-      editIndex: -1, // ? 当前聚焦的输入框的行数
-      editName: '', // ? 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
-      editAge: '', // ? 第二列输入框
-      editBirthday: '', // ? 第三列输入框
-      editAddress: '', // ? 第四列输入框
+      indexx: '',
+      userv: { name: '', age: '', address: '' }, // ? 搜索框中绑定的姓名、年龄、地址
+      userAdd: { name: '', age: '', address: '' }, // ? 新增弹窗中绑定的姓名、年龄、地址
+      userEdit: { name: '', age: '', address: '' }, // ? 修改弹窗中绑定的姓名、年龄、地址
       modalAdd: false,
-      modalModify: false,
+      editModal: false,
       columns: [
         {
           title: '姓名',
@@ -201,17 +169,45 @@ export default {
   computed: {
     // ? 查询功能
     list() {
-      if (this.name) {
+      if (this.userv.name && !this.userv.age && !this.userv.address) {
         return this.data.filter((x) => {
-          return x.name.match(this.name)
+          return x.name.match(this.userv.name)
         })
-      } else if (this.age) {
+      } else if (this.userv.age && !this.userv.name && !this.userv.address) {
         return this.data.filter((x) => {
-          return x.age === Number(this.age)
+          return x.age.toString().match(this.userv.age)
         })
-      } else if (this.address) {
+      } else if (this.userv.address && !this.userv.age && !this.userv.name) {
         return this.data.filter((x) => {
-          return x.address.match(this.address)
+          return x.address.match(this.userv.address)
+        })
+      } else if (this.userv.name && this.userv.age && !this.userv.address) {
+        return this.data.filter((x) => {
+          return (
+            x.name.match(this.userv.name) &&
+            x.age.toString().match(this.userv.age)
+          )
+        })
+      } else if (this.userv.name && this.userv.address && !this.userv.age) {
+        return this.data.filter((x) => {
+          return (
+            x.name.match(this.userv.name) && x.address.match(this.userv.address)
+          )
+        })
+      } else if (this.userv.age && this.userv.address && !this.userv.name) {
+        return this.data.filter((x) => {
+          return (
+            x.age.toString().match(this.userv.age) &&
+            x.address.match(this.userv.address)
+          )
+        })
+      } else if (this.userv.name && this.userv.age && this.userv.address) {
+        return this.data.filter((x) => {
+          return (
+            x.name.match(this.userv.name) &&
+            x.age.toString().match(this.userv.age) &&
+            x.address.match(this.userv.address)
+          )
         })
       } else {
         return this.data
@@ -220,34 +216,46 @@ export default {
   },
   methods: {
     // ? 保存按钮
-    handleSave(index) {
-      this.data[index].name = this.editName
-      this.data[index].age = this.editAge
-      this.data[index].address = this.editAddress
-      this.editIndex = -1
+    saveBtn(index) {
+      if (this.userEdit.name && this.userEdit.age && this.userEdit.address) {
+        this.data[index].name = this.userEdit.name
+        this.data[index].age = this.userEdit.age
+        this.data[index].address = this.userEdit.address
+        this.$Message.success('修改成功')
+      } else {
+        this.$Message.error('修改失败，内容不能为空')
+      }
+    },
+    // ? 新增按钮
+    addBtn() {
+      this.modalAdd = true
+      this.userAdd.name = ''
+      this.userAdd.age = ''
+      this.userAdd.address = ''
     },
     // ? 添加弹窗中的添加按钮
     addModal() {
-      if ((this.addName, this.addAge, this.addAddress)) {
+      if (this.userAdd.name && this.userAdd.age && this.userAdd.address) {
         this.data.push({
-          name: this.addName,
-          age: Number(this.addAge),
-          address: this.addAddress,
+          name: this.userAdd.name,
+          age: Number(this.userAdd.age),
+          address: this.userAdd.address,
         })
+        this.$Message.success('添加成功')
       } else {
         this.$Message.error('添加失败,内容不能为空')
       }
-      this.addAge = ''
-      this.addName = ''
-      this.addAddress = ''
+      this.userAdd.age = ''
+      this.userAdd.name = ''
+      this.userAdd.address = ''
     },
     // ?修改按钮
     modifyBtn(row, index) {
-      console.log(row.age)
-      this.editIndex = index
-      this.editName = row.name
-      this.editAge = row.age
-      this.editAddress = row.address
+      this.editModal = true
+      this.userEdit.name = row.name
+      this.userEdit.age = row.age
+      this.userEdit.address = row.address
+      this.indexx = index
     },
     // ?删除按钮
     remove(index) {

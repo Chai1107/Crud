@@ -63,7 +63,7 @@
   .operation {
     display: flex;
   }
-  .modifyBtn {
+  .modify-btn {
     width: 40px;
     height: 24px;
     padding: 0;
@@ -81,27 +81,7 @@
       margin-right: 5px;
     }
   }
-  .saveBtn {
-    width: 40px;
-    height: 24px;
-    padding: 0;
-    border-radius: 3px;
-    margin-right: 10px;
-    background-color: #435a9d;
-    color: white;
-    border: none;
-    &:hover {
-      width: 40px;
-      height: 24px;
-      padding: 0;
-      border-radius: 3px;
-      margin-right: 10px;
-      background-color: #5c6fa8;
-      color: white;
-      border: none;
-    }
-  }
-  .cancelBtn {
+  .delete-btn {
     width: 40px;
     height: 24px;
     padding: 0;
@@ -119,25 +99,7 @@
       border: none;
     }
   }
-  .deleteBtn {
-    width: 40px;
-    height: 24px;
-    padding: 0;
-    border-radius: 3px;
-    background-color: #d4546b;
-    color: white;
-    border: none;
-    &:hover {
-      width: 40px;
-      height: 24px;
-      padding: 0;
-      border-radius: 3px;
-      background-color: #d46b7f;
-      color: white;
-      border: none;
-    }
-  }
-  .addBtn {
+  .add-btn {
     width: 48px;
     padding: 4px;
     background-color: #435a9d;
@@ -151,16 +113,7 @@
       border: none;
     }
   }
-  .addIcon {
+  .add-icon {
     font-size: 16px;
-  }
-  .ageInput {
-    width: 64px;
-  }
-  .nameInput {
-    width: 104px;
-  }
-  .addressInput {
-    width: 180px;
   }
   
