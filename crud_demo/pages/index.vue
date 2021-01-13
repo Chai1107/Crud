@@ -243,7 +243,7 @@ export default {
         })
         this.$Message.success('添加成功')
       } else {
-        this.$Message.error('添加失败,内容不能为空')
+        this.$Message.error('添加失败,内容不能为空！')
       }
       this.userAdd.age = ''
       this.userAdd.name = ''
