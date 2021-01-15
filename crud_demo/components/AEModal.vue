@@ -33,8 +33,6 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     addoredit: Number,
     // eslint-disable-next-line vue/require-default-prop
-    row: Object,
-    // eslint-disable-next-line vue/require-default-prop
     userinfo: Object,
   },
   data() {
