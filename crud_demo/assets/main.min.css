@@ -2,7 +2,7 @@
 
 .search-card { background-color: rgba(255, 255, 255, 0.9); width: 700px; border-radius: 6px; padding: 8px 16px 8px 24px; display: -webkit-box; display: -ms-flexbox; display: flex; position: relative; height: 48px; }
 
-.search-input { width: 182px !important; }
+.search-input { width: 163px !important; }
 
 .ivu-input-wrapper { width: 150px; margin-right: 10px; }
 
@@ -18,7 +18,7 @@
 
 .ivu-table::before, .ivu-table::after { width: 0; height: 0; }
 
-.ivu-modal { width: 200px !important; }
+.ivu-modal { width: 300px !important; }
 
 .operation { display: -webkit-box; display: -ms-flexbox; display: flex; }
 
@@ -35,4 +35,6 @@
 .add-btn:hover { width: 48px; padding: 4px; background-color: #5c6fa8; color: white; border: none; }
 
 .add-icon { font-size: 16px; }
+
+.action { display: -webkit-box; display: -ms-flexbox; display: flex; }
 /*# sourceMappingURL=main.min.css.map */

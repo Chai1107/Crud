@@ -19,7 +19,7 @@
     height: 48px;
   }
   .search-input {
-    width: 182px !important;
+    width: 163px !important;
   }
   .ivu-input-wrapper {
     width: 150px;
@@ -58,7 +58,7 @@
     height: 0;
   }
   .ivu-modal {
-    width: 200px !important;
+    width: 300px !important;
   }
   .operation {
     display: flex;
@@ -115,5 +115,8 @@
   }
   .add-icon {
     font-size: 16px;
+  }
+  .action {
+    display: flex;
   }
   
