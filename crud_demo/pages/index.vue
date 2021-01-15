@@ -1,10 +1,12 @@
 <template>
   <div class="container">
     <!-- 搜索框 -->
-    <Search :listt="data" @getList="getList"></Search>
+    <Search @getList="getList"></Search>
     <!-- 主要内容 -->
     <div class="main-card">
-      <AddModal :listt="data"></AddModal>
+      <Button class="add-btn" @click="addBtn()">
+        <Icon class="add-icon" type="md-add" />
+      </Button>
       <!-- 表格 -->
       <Table height="450" :columns="columns" :data="list">
         <template slot="name" slot-scope="{ row }">
@@ -18,7 +20,14 @@
         </template>
         <template slot="action" slot-scope="{ row, index }">
           <div class="action">
-            <EditModal :row="row" :index="index" :listt="data"></EditModal>
+            <Button
+              type="primary"
+              size="small"
+              class="modify-btn"
+              @click="modifyBtn(row, index)"
+            >
+              修改
+            </Button>
             <Button
               class="delete-btn"
               type="error"
@@ -31,21 +40,32 @@
         </template>
       </Table>
     </div>
+    <!-- 弹窗 -->
+    <AEModal
+      :userinfo="userInfo"
+      :modalstate="modalState"
+      :addoredit="AddOrEdit"
+      @modalClose="modalClose"
+      @add="add"
+      @edit="edit"
+    ></AEModal>
   </div>
 </template>
 
 <script>
 import Search from '../components/Search'
-import AddModal from '../components/AddModal'
-import EditModal from '../components/EditModal'
+import AEModal from '../components/AEModal'
 export default {
   components: {
     Search,
-    AddModal,
-    EditModal,
+    AEModal,
   },
   data() {
     return {
+      indexx: '',
+      AddOrEdit: 0,
+      modalState: false,
+      userInfo: { name: '', age: '', address: '' },
       userSearch: { name: '', age: '', address: '' },
       columns: [
         {
@@ -104,10 +124,41 @@ export default {
     },
   },
   methods: {
+    // ? 拿到搜索组件传过来的参并赋值
     getList(userName, userAge, userAddress) {
       this.userSearch.name = userName
       this.userSearch.age = userAge
       this.userSearch.address = userAddress
+    },
+    // ? 关闭弹窗组件
+    modalClose(state) {
+      this.modalState = state
+    },
+    // ? 新增按钮
+    addBtn() {
+      this.modalState = true
+      this.AddOrEdit = 0
+    },
+    // ? 拿到弹窗传过来的对象并新增的操作
+    add(obj, state) {
+      this.data.push(obj)
+      this.modalState = state
+    },
+    // ? 拿到弹窗传过来的对象并保存的操作
+    edit(obj, state) {
+      this.data[this.indexx].name = obj.name
+      this.data[this.indexx].age = obj.age
+      this.data[this.indexx].address = obj.address
+      this.modalState = state
+    },
+    // ? 修改按钮
+    modifyBtn(row, index) {
+      this.modalState = true
+      this.AddOrEdit = 1
+      this.userInfo.name = row.name
+      this.userInfo.age = row.age.toString()
+      this.userInfo.address = row.address
+      this.indexx = index
     },
     // ?删除按钮
     remove(index) {

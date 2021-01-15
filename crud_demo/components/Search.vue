@@ -28,8 +28,6 @@
 <script>
 export default {
   name: 'Search',
-  // eslint-disable-next-line vue/require-default-prop
-  props: { listt: Array },
   data() {
     return {
       userv: { name: '', age: '', address: '' }, // ? 搜索框中绑定的姓名、年龄、地址
