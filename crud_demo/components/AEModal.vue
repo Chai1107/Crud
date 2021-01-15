@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="modalstate" :closable="false" :mask-closable="false">
+    <Modal v-model="open" :closable="false" :mask-closable="false">
       <Form ref="userAdd" :model="abc" :rules="userRules" :label-width="80">
         <FormItem label="姓名" prop="name" class="input-title">
           <Input v-model="abc.name" placeholder="请输入姓名" clearable />
@@ -29,7 +29,7 @@ export default {
   name: 'AEModal',
   // eslint-disable-next-line vue/require-default-prop
   props: {
-    modalstate: Boolean,
+    value: { type: Boolean, default: false },
     // eslint-disable-next-line vue/require-default-prop
     addoredit: Number,
     // eslint-disable-next-line vue/require-default-prop
@@ -37,6 +37,7 @@ export default {
   },
   data() {
     return {
+      open: false,
       inputUser: { name: '', age: '', address: '' },
       userRules: {
         name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
@@ -52,6 +53,11 @@ export default {
       } else {
         return this.inputUser
       }
+    },
+  },
+  watch: {
+    value(val) {
+      this.open = val
     },
   },
   methods: {

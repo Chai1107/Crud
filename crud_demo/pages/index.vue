@@ -4,7 +4,7 @@
     <Search @getList="getList"></Search>
     <!-- 主要内容 -->
     <div class="main-card">
-      <Button class="add-btn" @click="addBtn()">
+      <Button class="add-btn" @click="addBtn">
         <Icon class="add-icon" type="md-add" />
       </Button>
       <!-- 表格 -->
@@ -42,9 +42,9 @@
     </div>
     <!-- 弹窗 -->
     <AEModal
+      v-model="modalState"
       :userinfo="userInfo"
-      :modalstate="modalState"
-      :addoredit="AddOrEdit"
+      :addoredit="addoredit"
       @modalClose="modalClose"
       @add="add"
       @edit="edit"
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       indexx: '',
-      AddOrEdit: 0,
+      addoredit: 0,
       modalState: false,
       userInfo: { name: '', age: '', address: '' },
       userSearch: { name: '', age: '', address: '' },
@@ -137,7 +137,7 @@ export default {
     // ? 新增按钮
     addBtn() {
       this.modalState = true
-      this.AddOrEdit = 0
+      this.addoredit = 0
     },
     // ? 拿到弹窗传过来的对象并新增的操作
     add(obj, state) {
@@ -154,7 +154,7 @@ export default {
     // ? 修改按钮
     modifyBtn(row, index) {
       this.modalState = true
-      this.AddOrEdit = 1
+      this.addoredit = 1
       this.userInfo.name = row.name
       this.userInfo.age = row.age.toString()
       this.userInfo.address = row.address
