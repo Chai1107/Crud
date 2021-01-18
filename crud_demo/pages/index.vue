@@ -1,23 +1,14 @@
 <template>
   <div class="container">
     <!-- 搜索框 -->
-    <Search @getList="getList"></Search>
+    <Search @on-search="searchUserInfo"></Search>
     <!-- 主要内容 -->
     <div class="main-card">
       <Button class="add-btn" @click="addBtn">
         <Icon class="add-icon" type="md-add" />
       </Button>
       <!-- 表格 -->
-      <Table height="450" :columns="columns" :data="list">
-        <template slot="name" slot-scope="{ row }">
-          <span>{{ row.name }}</span>
-        </template>
-        <template slot="age" slot-scope="{ row }">
-          <span>{{ row.age }}</span>
-        </template>
-        <template slot="address" slot-scope="{ row }">
-          <span>{{ row.address }}</span>
-        </template>
+      <Table height="450" :columns="columns" :data="data">
         <template slot="action" slot-scope="{ row, index }">
           <div class="action">
             <Button
@@ -45,16 +36,15 @@
       v-model="modalState"
       :userinfo="userInfo"
       :addoredit="addoredit"
-      @modalClose="modalClose"
-      @add="add"
-      @edit="edit"
+      @on-add="addUserInfo"
+      @on-edit="editUserInfo"
     ></AEModal>
   </div>
 </template>
 
 <script>
-import Search from '../components/Search'
-import AEModal from '../components/AEModal'
+import Search from '@/components/Search'
+import AEModal from '@/components/AEModal'
 export default {
   components: {
     Search,
@@ -62,23 +52,23 @@ export default {
   },
   data() {
     return {
-      indexx: '',
-      addoredit: 0,
+      newIndex: '',
+      addoredit: false,
       modalState: false,
       userInfo: { name: '', age: '', address: '' },
       userSearch: { name: '', age: '', address: '' },
       columns: [
         {
           title: '姓名',
-          slot: 'name',
+          key: 'name',
         },
         {
           title: '年龄',
-          slot: 'age',
+          key: 'age',
         },
         {
           title: '地址',
-          slot: 'address',
+          key: 'address',
           width: 200,
         },
         {
@@ -91,74 +81,58 @@ export default {
       data: [
         {
           name: '张黎明',
-          age: 18,
+          age: '18',
           address: '湘雅居24号',
         },
         {
           name: '李桥',
-          age: 24,
+          age: '24',
           address: '九号公馆501号120室',
         },
         {
           name: '赵倩',
-          age: 30,
+          age: '30',
           address: '篱笆小院201弄',
         },
         {
           name: '钱丽丽',
-          age: 26,
+          age: '26',
           address: '海棠花园201号1247室',
         },
       ],
     }
   },
-  computed: {
-    // ? 查询功能
-    list() {
-      return this.data.filter(
-        (x) =>
-          x.name.includes(this.userSearch.name) &&
-          x.age.toString().includes(this.userSearch.age) &&
-          x.address.includes(this.userSearch.address)
-      )
-    },
-  },
   methods: {
-    // ? 拿到搜索组件传过来的参并赋值
-    getList(userName, userAge, userAddress) {
-      this.userSearch.name = userName
-      this.userSearch.age = userAge
-      this.userSearch.address = userAddress
-    },
-    // ? 关闭弹窗组件
-    modalClose(state) {
-      this.modalState = state
+    // ? 拿到搜索组件传过来的参并搜索
+    searchUserInfo(userName, userAge, userAddress) {
+      this.data = this.data.filter(
+        (x) =>
+          x.name.includes(userName) &&
+          x.age.includes(userAge) &&
+          x.address.includes(userAddress)
+      )
     },
     // ? 新增按钮
     addBtn() {
       this.modalState = true
-      this.addoredit = 0
+      this.addoredit = false
     },
     // ? 拿到弹窗传过来的对象并新增的操作
-    add(obj, state) {
+    addUserInfo(obj) {
       this.data.push(obj)
-      this.modalState = state
+      this.modalState = false
     },
     // ? 拿到弹窗传过来的对象并保存的操作
-    edit(obj, state) {
-      this.data[this.indexx].name = obj.name
-      this.data[this.indexx].age = obj.age
-      this.data[this.indexx].address = obj.address
-      this.modalState = state
+    editUserInfo(obj) {
+      this.data[this.newIndex] = obj
+      this.modalState = false
     },
     // ? 修改按钮
     modifyBtn(row, index) {
       this.modalState = true
-      this.addoredit = 1
-      this.userInfo.name = row.name
-      this.userInfo.age = row.age.toString()
-      this.userInfo.address = row.address
-      this.indexx = index
+      this.addoredit = true
+      this.userInfo = row
+      this.newIndex = index
     },
     // ?删除按钮
     remove(index) {

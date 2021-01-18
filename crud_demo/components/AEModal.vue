@@ -12,10 +12,8 @@
           <Input v-model="abc.address" placeholder="请输入地址" clearable />
         </FormItem>
         <FormItem>
-          <Button @click="addModalClose()">取消</Button>
-          <Button v-if="addoredit === 0" @click="addModal('userAdd')"
-            >添加</Button
-          >
+          <Button @click="addModalClose">取消</Button>
+          <Button v-if="!addoredit" @click="addModal('userAdd')">添加</Button>
           <Button v-else @click="saveModal('userAdd')">保存</Button>
         </FormItem>
       </Form>
@@ -31,7 +29,7 @@ export default {
   props: {
     value: { type: Boolean, default: false },
     // eslint-disable-next-line vue/require-default-prop
-    addoredit: Number,
+    addoredit: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     userinfo: Object,
   },
@@ -48,7 +46,7 @@ export default {
   },
   computed: {
     abc() {
-      if (this.addoredit === 1) {
+      if (this.addoredit === true) {
         return this.userinfo
       } else {
         return this.inputUser
@@ -62,12 +60,13 @@ export default {
   },
   methods: {
     addModalClose() {
-      this.$emit('modalClose', false)
+      this.open = false
+      this.$emit('input', false)
     },
     addModal(userAdd) {
       this.$refs[userAdd].validate((valid) => {
         if (valid) {
-          this.$emit('add', this.inputUser, false)
+          this.$emit('on-add', this.inputUser)
           this.$Message.success('添加成功')
         } else {
           this.$Message.error('添加失败,内容不能为空！')
@@ -77,7 +76,7 @@ export default {
     saveModal(userAdd) {
       this.$refs[userAdd].validate((valid) => {
         if (valid) {
-          this.$emit('edit', this.userinfo, false)
+          this.$emit('on-edit', this.userinfo)
           this.$Message.success('保存成功')
         } else {
           this.$Message.error('保存失败,内容不能为空！')
