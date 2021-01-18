@@ -34,8 +34,8 @@
     <!-- 弹窗 -->
     <AEModal
       v-model="modalState"
-      :userinfo="userInfo"
-      :addoredit="addoredit"
+      :userInfo="userInfo"
+      :addOrEdit="addoredit"
       @on-add="addUserInfo"
       @on-edit="editUserInfo"
     ></AEModal>
@@ -104,12 +104,12 @@ export default {
   },
   methods: {
     // ? 拿到搜索组件传过来的参并搜索
-    searchUserInfo(userName, userAge, userAddress) {
+    searchUserInfo(userv) {
       this.data = this.data.filter(
         (x) =>
-          x.name.includes(userName) &&
-          x.age.includes(userAge) &&
-          x.address.includes(userAddress)
+          x.name.includes(userv.name) &&
+          x.age.includes(userv.age) &&
+          x.address.includes(userv.address)
       )
     },
     // ? 新增按钮

@@ -35,12 +35,7 @@ export default {
   },
   methods: {
     searchBtn() {
-      this.$emit(
-        'on-search',
-        this.userv.name,
-        this.userv.age,
-        this.userv.address
-      )
+      this.$emit('on-search', this.userv)
     },
   },
 }
